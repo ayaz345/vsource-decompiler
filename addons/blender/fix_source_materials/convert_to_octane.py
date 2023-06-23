@@ -47,14 +47,12 @@ def convertMaterial(material):
     output = createMatOutput(material);
 
     material.node_tree.links.new(output.inputs[0], group.outputs[0])
-    
-    displacement = False
+
+    displacement = any(
+        node.label == "OCCLUSION" for node in material.node_tree.nodes
+    )
     for node in material.node_tree.nodes:
-        if node.label == "OCCLUSION":
-            displacement = True
-    
-    for node in material.node_tree.nodes:
-        
+
         if node.label == "BASE COLOR":
             color1 = createOtImageNode(material, node)
             material.node_tree.links.new(group.inputs[0], color1.outputs[0])
